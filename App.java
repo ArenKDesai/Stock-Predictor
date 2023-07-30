@@ -29,10 +29,22 @@ public class App extends Application {
 
         submitButton.setOnAction(e -> {
             String inputText = stock_name_input.getText();
-
+            primaryStage.close();
+            runPythonScript(inputText);
         });
 
         root.getChildren().add(vbox);
         primaryStage.show();
     }
+
+    private void runPythonScript(String inputText) {
+            try {
+                Process p = Runtime.getRuntime().exec("python kaggle_prediction.py " + inputText);
+                BufferedReader in = new BufferedReader(new InputStreamReader(p.getInputStream()));
+                String ret = in.readLine();
+                System.out.println("value is : " + ret);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
 }
