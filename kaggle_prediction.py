@@ -74,4 +74,4 @@ if __name__ == '__main__':
     yf.pdr_override()
     stock_name = sys.argv[1]
     predict(stock_name)
-    print("/ndone/n")
+    print("done")

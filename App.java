@@ -56,7 +56,7 @@ public class App extends Application {
                 Process p = Runtime.getRuntime().exec("python kaggle_prediction.py " + inputText);
                 BufferedReader in = new BufferedReader(new InputStreamReader(p.getInputStream()));
                 String ret = in.readLine();
-                while (ret != "done") {
+                while (ret != null) {
                     System.out.println(ret);
                     ret = in.readLine();
                 }
