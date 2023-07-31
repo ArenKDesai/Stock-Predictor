@@ -6,6 +6,8 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ProgressBar;
+import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TextField;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -21,20 +23,32 @@ public class App extends Application {
     public void start(Stage primaryStage) throws Exception {
         StackPane root = new StackPane();
         primaryStage.setTitle("Stock Prediction Launcher");
-        primaryStage.setScene(new Scene(root, 80, 60));
+        primaryStage.setScene(new Scene(root, 100, 100));
         Label stock_name = new Label("Stock Name");
-         Button submitButton = new Button("Submit");
+        Button submitButton = new Button("Submit");
         TextField stock_name_input = new TextField();
         VBox vbox = new VBox(stock_name, stock_name_input, submitButton);
 
         submitButton.setOnAction(e -> {
             String inputText = stock_name_input.getText();
             primaryStage.close();
-            runPythonScript(inputText);
+            loading_screen(inputText);
         });
 
         root.getChildren().add(vbox);
         primaryStage.show();
+    }
+
+    private void loading_screen(String inputText) {
+        StackPane root = new StackPane();
+        Stage loading_screen = new Stage();
+        loading_screen.setTitle("Loading...");
+        ProgressIndicator progressIndicator = new ProgressIndicator();
+        VBox vbox = new VBox(progressIndicator);
+        root.getChildren().add(vbox);
+        loading_screen.setScene(new Scene(root, 100, 100));
+        loading_screen.show();
+        runPythonScript(inputText);
     }
 
     private void runPythonScript(String inputText) {
@@ -42,7 +56,10 @@ public class App extends Application {
                 Process p = Runtime.getRuntime().exec("python kaggle_prediction.py " + inputText);
                 BufferedReader in = new BufferedReader(new InputStreamReader(p.getInputStream()));
                 String ret = in.readLine();
-                System.out.println("value is : " + ret);
+                while (ret != "done") {
+                    System.out.println(ret);
+                    ret = in.readLine();
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
