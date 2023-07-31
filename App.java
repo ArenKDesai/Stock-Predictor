@@ -28,11 +28,16 @@ public class App extends Application {
         Button submitButton = new Button("Submit");
         TextField stock_name_input = new TextField();
         VBox vbox = new VBox(stock_name, stock_name_input, submitButton);
+        vbox.setAlignment(javafx.geometry.Pos.CENTER);
 
         submitButton.setOnAction(e -> {
             String inputText = stock_name_input.getText();
             primaryStage.close();
             loading_screen(inputText);
+            Thread thread = new Thread(() -> {
+                runPythonScript(inputText);
+            });
+            thread.start();
         });
 
         root.getChildren().add(vbox);
@@ -45,23 +50,23 @@ public class App extends Application {
         loading_screen.setTitle("Loading...");
         ProgressIndicator progressIndicator = new ProgressIndicator();
         VBox vbox = new VBox(progressIndicator);
+        vbox.setAlignment(javafx.geometry.Pos.CENTER);
         root.getChildren().add(vbox);
         loading_screen.setScene(new Scene(root, 100, 100));
         loading_screen.show();
-        runPythonScript(inputText);
     }
 
     private void runPythonScript(String inputText) {
-            try {
-                Process p = Runtime.getRuntime().exec("python kaggle_prediction.py " + inputText);
-                BufferedReader in = new BufferedReader(new InputStreamReader(p.getInputStream()));
-                String ret = in.readLine();
-                while (ret != null) {
-                    System.out.println(ret);
-                    ret = in.readLine();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
+        try {
+            Process p = Runtime.getRuntime().exec("python kaggle_prediction.py " + inputText);
+            BufferedReader in = new BufferedReader(new InputStreamReader(p.getInputStream()));
+            String ret = in.readLine();
+            while (ret != null) {
+                System.out.println(ret);
+                ret = in.readLine();
             }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+    }
 }
