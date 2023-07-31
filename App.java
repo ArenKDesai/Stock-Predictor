@@ -13,12 +13,18 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-
+/**
+ * JavaFX App
+ * This is the main class that launches the GUI and runs the python script
+ */
 public class App extends Application {
     public static void main(String[] args) throws Exception {
         launch(args);
     }
 
+    /**
+     * Launches the GUI with a starting screen
+     */
     @Override
     public void start(Stage primaryStage) throws Exception {
         StackPane root = new StackPane();
@@ -30,7 +36,7 @@ public class App extends Application {
         VBox vbox = new VBox(stock_name, stock_name_input, submitButton);
         vbox.setAlignment(javafx.geometry.Pos.CENTER);
 
-        submitButton.setOnAction(e -> {
+        submitButton.setOnAction(e -> { // When the submit button is pressed, the python script is run
             String inputText = stock_name_input.getText();
             primaryStage.close();
             loading_screen(inputText);
@@ -44,18 +50,28 @@ public class App extends Application {
         primaryStage.show();
     }
 
+    /**
+     * Creates a loading screen while the python script is running
+     * @param inputText the stock name
+     */
     private void loading_screen(String inputText) {
         StackPane root = new StackPane();
         Stage loading_screen = new Stage();
         loading_screen.setTitle("Loading...");
-        ProgressIndicator progressIndicator = new ProgressIndicator();
-        VBox vbox = new VBox(progressIndicator);
+        Label loading_label = new Label("Loading...");
+        Label stock_name = new Label(inputText + " Prediction");
+        ProgressIndicator progressIndicator = new ProgressIndicator(); // Doesn't update with Python progress
+        VBox vbox = new VBox(loading_label, progressIndicator, stock_name);
         vbox.setAlignment(javafx.geometry.Pos.CENTER);
         root.getChildren().add(vbox);
         loading_screen.setScene(new Scene(root, 100, 100));
         loading_screen.show();
     }
 
+    /**
+     * Runs the python script
+     * @param inputText the stock name
+     */
     private void runPythonScript(String inputText) {
         try {
             Process p = Runtime.getRuntime().exec("python kaggle_prediction.py " + inputText);
