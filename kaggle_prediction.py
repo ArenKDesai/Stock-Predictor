@@ -67,7 +67,7 @@ def predict(stock_name):
     plt.ylabel('Close Price USD ($)', fontsize=18)
     plt.plot(train['Close'])
     plt.plot(valid[['Close', 'Predictions']])
-    # plt.legend(['Train', 'Val', 'Predictions'], loc='lower right')
+    plt.legend(['Train', 'Val', 'Predictions'], loc='lower right')
     plt.show()
 
 if __name__ == '__main__':
