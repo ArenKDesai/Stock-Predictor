@@ -36,7 +36,7 @@ X_test = np.array(X_test)
 X_test = np.reshape(X_test, (X_test.shape[0], X_test.shape[1], 1))
 predicted_stock_price = regressor.predict(X_test)
 predicted_stock_price = scaler.inverse_transform(predicted_stock_price)
-plt.plot(actual_stock_price, color='red', label='Actual Stock Price') # Something's up with this line
+plt.plot(actual_stock_price, color='red', label='Actual Stock Price')
 plt.plot(predicted_stock_price, color='blue', label='Predicted Stock Price')
 plt.title('Stock Price Prediction')
 plt.xlabel('Time')
