@@ -2,6 +2,7 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -27,7 +28,9 @@ public class App extends Application {
     public void start(Stage primaryStage) throws Exception {
         StackPane root = new StackPane();
         primaryStage.setTitle("Stock Prediction Launcher");
-        primaryStage.setScene(new Scene(root, 100, 100));
+        Scene baseScene = new Scene(root, 800, 500);
+        primaryStage.setScene(baseScene);
+        primaryStage.setResizable(true);
         Label stock_name = new Label("Stock Name");
         Button submitButton = new Button("Submit");
         TextField stock_name_input = new TextField();
@@ -62,7 +65,7 @@ public class App extends Application {
         VBox vbox = new VBox(loading_label, progressIndicator, stock_name);
         vbox.setAlignment(javafx.geometry.Pos.CENTER);
         root.getChildren().add(vbox);
-        loading_screen.setScene(new Scene(root, 100, 100));
+        loading_screen.setScene(new Scene(root, 800, 500));
         loading_screen.show();
     }
 

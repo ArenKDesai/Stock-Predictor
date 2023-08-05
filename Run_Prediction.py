@@ -125,5 +125,5 @@ def predict(stock_name):
 if __name__ == '__main__':
     yf.pdr_override()
     stock_name = sys.argv[1]
-    test(stock_name)
+    predict(stock_name)
     print("done")
