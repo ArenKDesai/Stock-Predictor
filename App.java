@@ -35,7 +35,16 @@ public class App extends Application {
         Button submitButton = new Button("Submit");
         TextField stock_name_input = new TextField();
         VBox vbox = new VBox(stock_name, stock_name_input, submitButton);
+
+        // Customizing the GUI
+        root.setBackground(new javafx.scene.layout.Background(new javafx.scene.layout.BackgroundFill(Paint.valueOf("#6bc983"), null, null)));
         vbox.setAlignment(javafx.geometry.Pos.CENTER);
+        vbox.setSpacing(10);
+        stock_name.setStyle("-fx-font-size: 24px; -fx-font-weight: bold;");
+        stock_name_input.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
+        submitButton.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
+        stock_name_input.setMaxWidth(150);
+        
 
         submitButton.setOnAction(e -> { // When the submit button is pressed, the python script is run
             String inputText = stock_name_input.getText();
