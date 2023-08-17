@@ -10,7 +10,16 @@ from keras.models import load_model
 import yfinance as yf
 from pandas_datareader import data as pdr
 from datetime import datetime
+from bs4 import BeautifulSoup as bs
+import requests
 os.chdir("C://Users//arenk//Documents//stock_predictor")
+
+def get_stock_data():
+    url = "https://mergr.com/public-information-technology-companies"
+    page = requests.get(url)
+    soup = bs(page.content, "html.parser")
+    stocks = soup.findAll("span", {"class": "label label-sm label-primary"})
+    print(stocks)
 
 def train(stock_name, epochs, batch_size, verbose):
     df = pdr.get_data_yahoo('AAPL', start = '2012-01-01', end=datetime.now())
@@ -45,7 +54,8 @@ def train(stock_name, epochs, batch_size, verbose):
     model.compile(optimizer='adam', loss='mean_squared_error')
     model.fit(x_train, y_train, batch_size = batch_size, epochs = epochs)
 
-    
+if (__name__ == "__main__"):
+    get_stock_data()
 
 
 

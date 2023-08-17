@@ -14,3 +14,4 @@ TODO
 - [ ] Get model predictions on future stock data
 - [ ] Build in other stock analysis tools
 - [ ] Build a web app to display the model data
+- [ ] Look into the Gordon Growth Model
