@@ -73,10 +73,10 @@ def train(epochs, batch_size, verbose): # verbose is the column name of the stoc
         model.fit(x_train, y_train, batch_size = batch_size, epochs = epochs)
     
     os.chdir("C://Users//arenk//Documents//stock_predictor")
-    model.save("TechPredictor.keras", save_format="keras")
+    model.save("TechPredictor.h5", save_format="h5")
 
 if (__name__ == "__main__"):
-    train(10, 32, "Close")
+    train(3, 8, "Close")
 
 
 
