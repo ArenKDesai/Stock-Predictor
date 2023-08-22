@@ -10,19 +10,13 @@ from keras.models import load_model
 import yfinance as yf
 from pandas_datareader import data as pdr
 from datetime import datetime
-from bs4 import BeautifulSoup as bs
-import requests
-os.chdir("C://Users//arenk//Documents//stock_predictor")
 
-def get_stock_data():
-    url = "https://mergr.com/public-information-technology-companies"
-    page = requests.get(url)
-    soup = bs(page.content, "html.parser")
-    stocks = soup.findAll("span", {"class": "label label-sm label-primary"})
-    print(stocks)
+def get_stocks_list():
+    os.chdir("D:\\arenk\\Documents\\stock_prediction\\data")
+    return os.listdir()
 
-def train(stock_name, epochs, batch_size, verbose):
-    df = pdr.get_data_yahoo('AAPL', start = '2012-01-01', end=datetime.now())
+def train(epochs, batch_size, verbose): # verbose is the column name of the stock, such as "Close" or "Open"
+    df = yf.download('AAPL', start='2012-01-01', end=datetime.now())
     data = df.filter([verbose])
     dataset = data.values
     training_data_len = int(np.ceil(len(dataset) * 0.95))
@@ -50,12 +44,39 @@ def train(stock_name, epochs, batch_size, verbose):
     model.add(LSTM(64, return_sequences=False))
     model.add(Dense(25))
     model.add(Dense(1))
-
     model.compile(optimizer='adam', loss='mean_squared_error')
-    model.fit(x_train, y_train, batch_size = batch_size, epochs = epochs)
+
+    for file in get_stocks_list():
+        df = pd.read_csv(file)
+        data = df.filter([verbose])
+        dataset = data.values
+        training_data_len = int(np.ceil(len(dataset) * 0.95))
+
+        scaler = MinMaxScaler(feature_range=(0,1))
+        scaled_data = scaler.fit_transform(dataset)
+
+        train_data = scaled_data[0:int(training_data_len),:]
+        x_train = []
+        y_train = []
+
+        for i in range(60, len(train_data)):
+            x_train.append(train_data[i-60:i, 0])
+            y_train.append(train_data[i,0])
+            if i<=61:
+                print(x_train)
+                print(y_train)
+                print()
+
+        x_train, y_train = np.array(x_train), np.array(y_train)
+        x_train = np.reshape(x_train, (x_train.shape[0], x_train.shape[1], 1))
+
+        model.fit(x_train, y_train, batch_size = batch_size, epochs = epochs)
+    
+    os.chdir("C://Users//arenk//Documents//stock_predictor")
+    model.save("TechPredictor.keras", save_format="keras")
 
 if (__name__ == "__main__"):
-    get_stock_data()
+    train(10, 32, "Close")
 
 
 
