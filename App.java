@@ -74,7 +74,7 @@ public class App extends Application {
         VBox vbox = new VBox(loading_label, progressIndicator, stock_name);
         vbox.setAlignment(javafx.geometry.Pos.CENTER);
         root.getChildren().add(vbox);
-        loading_screen.setScene(new Scene(root, 800, 500));
+        loading_screen.setScene(new Scene(root, 180, 100));
         loading_screen.show();
     }
 

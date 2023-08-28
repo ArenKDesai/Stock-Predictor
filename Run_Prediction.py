@@ -18,14 +18,14 @@ def predict(stock_name):
     dataset = data.values
     training_data_len = int(np.ceil(len(dataset) * 0.95))
 
-    scaler = MinMaxScaler(feature_range=(0,1))
+    scaler = MinMaxScaler(feature_range=(0,1)) # Scale all the data to be values between 0 and 1
     scaled_data = scaler.fit_transform(dataset)
 
-    train_data = scaled_data[0:int(training_data_len),:]
+    train_data = scaled_data[0:int(training_data_len),:] # Split the data into x_train and y_train data sets
     x_train = []
     y_train = []
 
-    for i in range(60, len(train_data)):
+    for i in range(60, len(train_data)): # Creates a list of arrays in x_train, each array contains 60 values from the train_data
         x_train.append(train_data[i-60:i, 0])
         y_train.append(train_data[i,0])
         if i<=61:
@@ -41,7 +41,6 @@ def predict(stock_name):
     model.fit(x_train, y_train, batch_size = 1, epochs = 1)
 
     test_data = scaled_data[training_data_len - 60:,:]
-    print(test_data)
     x_test=[]
     y_test=dataset[training_data_len:,:]
     for i in range(60, len(test_data)):
